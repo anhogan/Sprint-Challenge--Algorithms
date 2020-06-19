@@ -96,9 +96,35 @@ class SortingRobot:
         """
         Sort the robot's list.
         """
-        # Fill this out
-        pass
+        # Start by grabbing the first item using swap method
+        self.swap_item()
 
+        # Loop until move_right is not possible, inner loops provide front and back movement
+        while self.can_move_right():
+            # While robot can move right, check if held item is smaller, if it is swap, otherwise keep moving
+            while self.move_right():
+                if self.compare_item() is -1:
+                    self.swap_item()
+
+            # At the end, check to see if held item is greater and swap if so
+            if self.compare_item() is 1:
+                self.swap_item()
+            # If current position is None, put card down and return since it's the only remaining slot for the item
+            elif self.compare_item() is None:
+                self.swap_item()
+                return
+            
+            # After traversing right and verifying that the biggest element is at the end, start to move left with smaller item
+            while self.move_left():
+                # If self.compare_item() is None, it's the beginning of the list so swap current item with that position
+                if self.compare_item() is None:
+                    self.swap_item()
+                    self.move_right()
+                    self.swap_item()
+            
+            # Once at the beginning, check if held item is smaller and place the smallest element down
+            if self.compare_item() is -1:
+                self.swap_item()
 
 if __name__ == "__main__":
     # Test our your implementation from the command line
